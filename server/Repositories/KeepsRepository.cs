@@ -2,6 +2,7 @@
 
 
 
+
 namespace Keepr_Remastered.Repositories;
 
 public class KeepsRepository
@@ -34,6 +35,13 @@ public class KeepsRepository
             return keep;
         }, keepData).FirstOrDefault();
         return keep;
+    }
+
+    internal void DeleteKeep(int keepId)
+    {
+        string sql = @"
+        DELETE FROM keeps WHERE keeps.id = @keepId LIMIT 1;";
+        _db.Execute(sql, new { keepId });
     }
 
     internal Keep EditKeep(Keep oldKeep)

@@ -19,6 +19,17 @@ public class KeepsService
         return keep;
     }
 
+    internal string DeleteKeep(int keepId, string userId)
+    {
+        Keep keep = GetKeepById(keepId);
+        if (keep.CreatorId != userId)
+        {
+            throw new Exception($"{keep.Name} is not your keep to delete!");
+        }
+        _repository.DeleteKeep(keepId);
+        return $"{keep.Name} has been deleted!";
+    }
+
     internal Keep EditKeep(int keepId, string userId, Keep keepData)
     {
         Keep oldKeep = GetKeepById(keepId);
