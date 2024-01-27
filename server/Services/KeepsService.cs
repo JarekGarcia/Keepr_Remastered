@@ -1,4 +1,7 @@
 
+
+
+
 namespace Keepr_Remastered.Services;
 
 public class KeepsService
@@ -14,5 +17,40 @@ public class KeepsService
     {
         Keep keep = _repository.CreateKeep(keepData);
         return keep;
+    }
+
+    internal Keep EditKeep(int keepId, string userId, Keep keepData)
+    {
+        Keep oldKeep = GetKeepById(keepId);
+        if (oldKeep.CreatorId != userId)
+        {
+            throw new Exception($"{oldKeep.Name} is not your keep to edit!");
+        }
+        oldKeep.Name = keepData.Name ?? oldKeep.Name;
+        oldKeep.Description = keepData.Description ?? oldKeep.Description;
+        oldKeep.Img = keepData.Img ?? oldKeep.Img;
+
+        Keep keep = _repository.EditKeep(oldKeep);
+        return keep;
+    }
+
+    internal Keep GetKeepById(int keepId)
+    {
+        Keep keep = _repository.GetKeepById(keepId);
+        return keep;
+    }
+
+    internal Keep GetKeepByIdAndIncrement(int keepId)
+    {
+        Keep keep = GetKeepById(keepId);
+        keep.Views++;
+        _repository.EditKeep(keep);
+        return keep;
+    }
+
+    internal List<Keep> GetKeeps()
+    {
+        List<Keep> keeps = _repository.GetKeeps();
+        return keeps;
     }
 }
