@@ -1,34 +1,34 @@
 <template>
-  <div class="container-fluid">
-    <section class="row">
-      <div class="col-4">
-
-      </div>
-    </section>
+  <div>
+    <KeepsCard />
   </div>
 </template>
 
 <script>
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import Pop from '../utils/Pop';
+import { keepsService } from '../services/KeepsServices'
+import { AppState } from '../AppState'
+import KeepsCard from '../components/KeepsCard.vue'
 
 export default {
   setup() {
     onMounted(() => {
-
+      GetKeeps();
     });
 
     async function GetKeeps() {
       try {
-
+        await keepsService.GetKeeps();
       } catch (error) {
         Pop.error(error)
       }
     }
     return {
-
+      keeps: computed(() => AppState.keeps),
     }
-  }
+  },
+  components: { KeepsCard }
 }
 </script>
 
